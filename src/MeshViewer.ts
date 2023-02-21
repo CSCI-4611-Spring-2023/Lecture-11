@@ -41,7 +41,7 @@ export class MeshViewer extends gfx.GfxApp
         const axes = new gfx.Axes3(4);
         this.scene.add(axes);
 
-        this.createCylinderMesh(this.cylinder, 20, 1);
+        this.createCylinderMesh(this.cylinder, 20, 3);
         this.scene.add(this.cylinder);
     }
 
@@ -76,10 +76,8 @@ export class MeshViewer extends gfx.GfxApp
         // Create the cylinder barrel triangles
         for(let i=0; i < numSegments; i++)
         {
-            // Compute the angle around the cylinder
-            const angle = i * angleIncrement;
-
             indices.push(i*2, i*2+2, i*2+1);
+            indices.push(i*2+1, i*2+2, i*2+3);
         }
 
         mesh.setVertices(vertices);
