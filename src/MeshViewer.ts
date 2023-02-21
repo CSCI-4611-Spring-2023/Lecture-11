@@ -42,6 +42,7 @@ export class MeshViewer extends gfx.GfxApp
         this.scene.add(axes);
 
         this.createCylinderMesh(this.cylinder, 20, 1);
+        this.scene.add(this.cylinder);
     }
 
     update(deltaTime: number): void 
@@ -53,6 +54,7 @@ export class MeshViewer extends gfx.GfxApp
     {
         const vertices: gfx.Vector3[] = [];
         const normals: gfx.Vector3[] = [];
+        const indices: number[] = [];
 
         const angleIncrement = (Math.PI * 2) / numSegments;
 
@@ -70,5 +72,19 @@ export class MeshViewer extends gfx.GfxApp
             normals.push(new gfx.Vector3(Math.cos(angle), 0, Math.sin(angle)));
             normals.push(new gfx.Vector3(Math.cos(angle), 0, Math.sin(angle)));
         }
+
+        // Create the cylinder barrel triangles
+        for(let i=0; i < numSegments; i++)
+        {
+            // Compute the angle around the cylinder
+            const angle = i * angleIncrement;
+
+            indices.push(i*2, i*2+2, i*2+1);
+        }
+
+        mesh.setVertices(vertices);
+        mesh.setNormals(normals);
+        mesh.setIndices(indices);
+        mesh.createDefaultVertexColors();
     }
 }
