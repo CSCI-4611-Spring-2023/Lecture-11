@@ -8,16 +8,20 @@ import * as gfx from 'gophergfx'
 
 export class MeshViewer extends gfx.GfxApp
 {
+    private cameraControls: gfx.OrbitControls;
+
     constructor()
     {
         super();
+
+        this.cameraControls = new gfx.OrbitControls(this.camera);
     }
 
     createScene(): void 
     {
         // Setup camera
         this.camera.setPerspectiveCamera(60, 1920/1080, 0.1, 10);
-        this.camera.position.set(0, 0, 5);
+        this.cameraControls.setDistance(5);
 
         // Set a black background
         this.renderer.background.set(0, 0, 0);
@@ -38,7 +42,7 @@ export class MeshViewer extends gfx.GfxApp
 
     update(deltaTime: number): void 
     {
-        
+        this.cameraControls.update(deltaTime);
     }
 
 }
