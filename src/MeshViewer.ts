@@ -9,12 +9,14 @@ import * as gfx from 'gophergfx'
 export class MeshViewer extends gfx.GfxApp
 {
     private cameraControls: gfx.OrbitControls;
+    private cylinder: gfx.Mesh;
 
     constructor()
     {
         super();
 
         this.cameraControls = new gfx.OrbitControls(this.camera);
+        this.cylinder = new gfx.Mesh();
     }
 
     createScene(): void 
@@ -38,6 +40,8 @@ export class MeshViewer extends gfx.GfxApp
         // Add an axes display to the scene
         const axes = new gfx.Axes3(4);
         this.scene.add(axes);
+
+        this.createCylinderMesh(this.cylinder, 20, 1);
     }
 
     update(deltaTime: number): void 
@@ -45,4 +49,26 @@ export class MeshViewer extends gfx.GfxApp
         this.cameraControls.update(deltaTime);
     }
 
+    private createCylinderMesh(mesh: gfx.Mesh, numSegments: number, height: number): void
+    {
+        const vertices: gfx.Vector3[] = [];
+        const normals: gfx.Vector3[] = [];
+
+        const angleIncrement = (Math.PI * 2) / numSegments;
+
+        // Loop around the barrel of the cylinder
+        for(let i=0; i <= numSegments; i++)
+        {
+            // Compute the angle around the cylinder
+            const angle = i * angleIncrement;
+
+            // Create two vertices that make up each column
+            vertices.push(new gfx.Vector3(Math.cos(angle), height/2, Math.sin(angle)));
+            vertices.push(new gfx.Vector3(Math.cos(angle), -height/2, Math.sin(angle)));
+        
+            // Add the normals for each column
+            normals.push(new gfx.Vector3(Math.cos(angle), 0, Math.sin(angle)));
+            normals.push(new gfx.Vector3(Math.cos(angle), 0, Math.sin(angle)));
+        }
+    }
 }
